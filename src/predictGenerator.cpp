@@ -12,13 +12,13 @@ namespace predict {
 	std::vector<std::vector<std::string> > getRHS_stringList (
 		std::vector<std::string> RHSList) {
 		std::string symbol;
-		int split_pos = 0,
+		unsigned split_pos = 0,
 			i = 0;
 
 		std::vector<std::vector<std::string> > RHS_stringList;
 		std::vector<std::string> RHSSet;
 
-		for(int i = 0; i< RHSList.size(); ++i) {
+		for(unsigned i = 0; i< RHSList.size(); ++i) {
 			while (!RHSList[i].empty()) {
 				split_pos = RHSList[i].find("><");
 
@@ -42,7 +42,7 @@ namespace predict {
 
 			i = 0;
 			for (auto x : RHS_stringList) {
-std::cout << "\nRHS List of Symbols " << i << " ";
+	//std::cout << "\nRHS List of Symbols " << i << " ";
 				for (auto v : x) {
 					std::cout << v << ',';
 				}
@@ -68,24 +68,7 @@ std::cout << "\nRHS List of Symbols " << i << " ";
 
 	void markLambda (const std::set<std::string>& nonterminals, 
 			std::vector<markedVocabulary>& derivesLambda) {
-//
-//		bool changes = true;
-//		std::vector<bool> RHS_derivesLambda;
-//
-//		for (unsigned i = 0; i < derivesLambda.size(); ++i) {
-//			derivesLambda[i].is_true = false;
-//			derivesLambda[i].symbol = nonterminals[i];
-//		}
-//
-//		while (changes) {
-//			changes = false;
-//
-//			for (unsigned i = 0; i < nonterminals.size(); ++i) {
-//				RHS_derivesLambda = true;
-//
-//				
-//			}
-//		}
+
 
 	}
 

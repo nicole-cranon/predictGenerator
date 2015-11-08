@@ -19,7 +19,8 @@ namespace predict {
 	// remove white space in string s
 	std::string normalize (const std::string& s);
 
-	void markLambda (const std::vector<std::string>& grammer);
+	void markLambda (const std::vector<std::string>& lhs,
+		std::vector<std::vector<std::string> > RHSStringList);
 
 	void computeFirst (const std::string& RHS,
 		std::set<std::string>& terminalSet);

@@ -9,6 +9,8 @@
 #include <iostream>
 
 namespace predict {
+	markedVocabulary derivesLambda;
+	
 	std::vector<std::vector<std::string> > getRHS_stringList (
 		std::vector<std::string> RHSList) {
 		std::string symbol;
@@ -70,7 +72,6 @@ namespace predict {
 			const std::vector<std::vector<std::string> >& RHSStringList) {
 		bool changes = true,
 			rhsDerivesLambda;
-		std::string newLhs;
 
 		for (unsigned i = 0; i < lhsList.size(); ++i) {
 			derivesLambda[lhsList[i]] = false;
@@ -82,6 +83,8 @@ namespace predict {
 			for (unsigned i = 0; i < lhsList.size(); ++i) {
 				rhsDerivesLambda = true;
 
+std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
+
 				for (unsigned j = 0; j < RHSStringList[i].size(); ++j) {
 					rhsDerivesLambda = rhsDerivesLambda && derivesLambda[RHSStringList[i][j]];
 				}
@@ -89,7 +92,8 @@ namespace predict {
 				if (rhsDerivesLambda && !(derivesLambda[lhsList[i]])) {
 					changes = true;
 
-					derivesLambda[lhsList[i]];
+					derivesLambda[lhsList[i]] = true;
+					std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
 				}
 			}
 		}

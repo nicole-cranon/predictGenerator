@@ -38,8 +38,8 @@ int main (int argc, char *argv[]) {
 		RHSList[i] = predict::normalize (RHSList[i]);
 		//std::cout << "\nRHS->" << RHSList[i] << "<-\n";
 	}
-	for (auto l : LHSList) {
-		predict::normalize (l);
+	for (unsigned i = 0; i < LHSList.size(); ++i) {
+		LHSList[i] = predict::normalize (LHSList[i]);
 		//std::cout << "\nLHS->" << l << "<-\n";
 	}
 	for (auto s : symbols) {
@@ -57,10 +57,10 @@ int main (int argc, char *argv[]) {
 
 	std::vector<std::vector<std::string> > RHSStringList = predict::getRHS_stringList (RHSList);
 
-	//predict::markLambda (nonterminals, derivesLambda);
+	predict::markLambda (LHSList, RHSStringList);
 
-//	for (auto d : derivesLambda) {
-//		std::cout << "\nDerives Lambda->" << std::boolalpha <<  d << "<-\n";
-//	}
+	for (auto d : predict::derivesLambda) {
+		std::cout << "\nDerives Lambda-> " << std::boolalpha <<  d.first << ' ' << d.second << " <-\n";
+	}
 
 }

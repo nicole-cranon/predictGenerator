@@ -55,9 +55,7 @@ int main (int argc, char *argv[]) {
 	//	std::cout << "\nNormalized Terminal->" << t << "<-\n";
 	}
 
-	std::vector<predict::markedVocabulary> derivesLambda(nonterminals.size());
-
-	auto RHSStringList = predict::getRHS_stringList (RHSList);
+	std::vector<std::vector<std::string> > RHSStringList = predict::getRHS_stringList (RHSList);
 
 	//predict::markLambda (nonterminals, derivesLambda);
 

@@ -42,7 +42,7 @@ namespace predict {
 
 			i = 0;
 			for (auto x : RHS_stringList) {
-	//std::cout << "\nRHS List of Symbols " << i << " ";
+	std::cout << "\nRHS List of Symbols " << i << " ";
 				for (auto v : x) {
 					std::cout << v << ',';
 				}
@@ -66,12 +66,20 @@ namespace predict {
 		return temp;
 	}
 
-	void markLambda (const std::vector<std::string>& grammer) {
+	void markLambda (const std::vector<std::string>& grammer, const std::vector<std::string>& RHSList) {
 		bool changes = true,
 			rhsDerivesLambda;
 
 		for (unsigned i = 0; i < grammer.size(); ++i) {
 			derivesLambda[grammer[i]] = false;
+		}
+
+		while (changes) {
+			changes = false;
+
+			for (unsigned i = 0; i < RHSList[i].size(); ++i) {
+				
+			}
 		}
 	}
 

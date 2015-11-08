@@ -16,11 +16,11 @@ namespace predict {
 
 	std::vector<std::vector<std::string> > getRHS_stringList (
 		std::vector<std::string> RHSList);
-	
+
 	// remove white space in string s
 	std::string normalize (const std::string& s);
 
-	void markLambda (const std::set<std::string>& LHS, 
+	void markLambda (const std::vector<std::string>& grammer, 
 		std::vector<markedVocabulary>& derivesLambda);
 
 	void computeFirst (const std::string& RHS,

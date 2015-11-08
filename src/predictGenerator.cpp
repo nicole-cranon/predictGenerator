@@ -66,7 +66,7 @@ namespace predict {
 		return temp;
 	}
 
-	void markLambda (const std::set<std::string>& nonterminals, 
+	void markLambda (const std::vector<std::string>& grammer, 
 			std::vector<markedVocabulary>& derivesLambda) {
 
 

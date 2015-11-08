@@ -7,12 +7,11 @@
 #include <set>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 namespace predict {
-	struct markedVocabulary {
-		bool is_true;
-		std::string symbol;
-	};
+	typedef std::unordered_map<std::string,bool> markedVocabulary;
+	markedVocabulary derivesLambda;
 
 	std::vector<std::vector<std::string> > getRHS_stringList (
 		std::vector<std::string> RHSList);
@@ -20,8 +19,7 @@ namespace predict {
 	// remove white space in string s
 	std::string normalize (const std::string& s);
 
-	void markLambda (const std::vector<std::string>& grammer, 
-		std::vector<markedVocabulary>& derivesLambda);
+	void markLambda (const std::vector<std::string>& grammer);
 
 	void computeFirst (const std::string& RHS,
 		std::set<std::string>& terminalSet);

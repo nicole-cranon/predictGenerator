@@ -66,10 +66,13 @@ namespace predict {
 		return temp;
 	}
 
-	void markLambda (const std::vector<std::string>& grammer, 
-			std::vector<markedVocabulary>& derivesLambda) {
+	void markLambda (const std::vector<std::string>& grammer) {
+		bool changes = true,
+			rhsDerivesLambda;
 
-
+		for (unsigned i = 0; i < grammer.size(); ++i) {
+			derivesLambda[grammer[i]] = false;
+		}
 	}
 
 	void computeFirst (const std::string& RHS,

@@ -99,21 +99,29 @@ namespace predict {
 		}
 	}
 
-	void computeFirst (const std::vector<std::string>& RHSString,
-			std::set<std::string>& terminalSet) {
-		terminalSet.clear();
+	std::set<std::string> computeFirst (const std::vector<std::string>& RHSString) {
+		std::set<std::string> terminalSet;
 
 		if (RHSString.size() == 0) {
 			terminalSet.insert("");
-			return;
 		}
+		else {
+			terminalSet = firstSet[RHSString[0]];
+			terminalSet.erase("");
 
-		firstSet[RHSString[0]].erase ("");
+			unsigned i = 0;
+			while (i < RHSString.size() && firstSet[RHSString[0]].find("") != firstSet[RHSString[i]].cend()) {
+				++i;
+				terminalSet.insert (firstSet[RHSString[i]].cbegin(), firstSet[RHSString[i]].cend());
+				terminalSet.erase ("");
+			}
 
-		unsigned i = 1;
-		while (i < RHSString.size() && firstSet[RHSString[0]].find("") != firstSet[RHSString[0]].cend()) {
-
+			if ((i == RHSString.size() - 1) && firstSet[RHSString[i]].find("") != firstSet[RHSString[i]].cend()) {
+				terminalSet.insert ("");
+			}
 		}
+		
+		return terminalSet;
 	}
 
 	void fillFirstSet () {

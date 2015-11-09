@@ -27,13 +27,7 @@ int main (int argc, char *argv[]) {
 
 	ga::analyze (ingrammer, outgrammer, nonterminals, terminals, symbols, 
 			LHSList, RHSList);
-	//TODO Change these for loops to traditional for loops as they are not
-	//changing the values in normalize
-	// normalize the grammer (remove spaces)
-	for (auto og : outgrammer) {
-		predict::normalize (og);
-		//std::cout << "\nOutgrammer->" << og << "<-\n";
-	}
+
 	for (unsigned i = 0; i < RHSList.size(); ++i) {
 		RHSList[i] = predict::normalize (RHSList[i]);
 		//std::cout << "\nRHS->" << RHSList[i] << "<-\n";
@@ -42,20 +36,8 @@ int main (int argc, char *argv[]) {
 		LHSList[i] = predict::normalize (LHSList[i]);
 		//std::cout << "\nLHS->" << l << "<-\n";
 	}
-	for (auto s : symbols) {
-		predict::normalize (s);
-		//std::cout << "\nSymbol->" << s << "<-\n";
-	}
-	for (auto nt : nonterminals) {
-		predict::normalize (nt);
-		//std::cout << "\nNormalized Nonterminal->" << nt << "<-\n";
-	}
-	for (auto t: terminals) {
-		predict::normalize (t);
-	//	std::cout << "\nNormalized Terminal->" << t << "<-\n";
-	}
 
-	std::vector<std::vector<std::string> > RHSStringList = predict::getRHS_stringList (RHSList);
+	auto RHSStringList = predict::getRHS_stringList (RHSList);
 
 	predict::markLambda (LHSList, RHSStringList);
 

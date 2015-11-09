@@ -10,10 +10,11 @@
 
 namespace predict {
 	markedVocabulary derivesLambda;
-	
-	std::vector<std::vector<std::string> > getRHS_stringList (
-		std::vector<std::string> RHSList) {
-		std::string symbol;
+	symbolMap firstSet, 
+		followSet;
+
+	symbolArr getRHS_stringList (std::vector<std::string> RHSList) {
+			std::string symbol;
 		unsigned split_pos = 0,
 			i = 0;
 
@@ -44,11 +45,12 @@ namespace predict {
 
 			i = 0;
 			for (auto x : RHS_stringList) {
-	std::cout << "\nRHS List of Symbols " << i << " ";
+				// std::cout << "\nRHS List of Symbols " << i << " ";
+
 				for (auto v : x) {
-					std::cout << v << ',';
+					// std::cout << v << ',';
 				}
-				std::cout <<'\n';
+				// std::cout <<'\n';
 				++i;
 			}
 
@@ -83,8 +85,6 @@ namespace predict {
 			for (unsigned i = 0; i < lhsList.size(); ++i) {
 				rhsDerivesLambda = true;
 
-std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
-
 				for (unsigned j = 0; j < RHSStringList[i].size(); ++j) {
 					rhsDerivesLambda = rhsDerivesLambda && derivesLambda[RHSStringList[i][j]];
 				}
@@ -93,15 +93,27 @@ std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsL
 					changes = true;
 
 					derivesLambda[lhsList[i]] = true;
-					std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
+					// std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
 				}
 			}
 		}
 	}
 
-	void computeFirst (const std::string& RHS,
+	void computeFirst (const std::vector<std::string>& RHSString,
 			std::set<std::string>& terminalSet) {
+		terminalSet.clear();
 
+		if (RHSString.size() == 0) {
+			terminalSet.insert("");
+			return;
+		}
+
+		firstSet[RHSString[0]].erase ("");
+
+		unsigned i = 1;
+		while (i < RHSString.size() && firstSet[RHSString[0]].find("") != firstSet[RHSString[0]].cend()) {
+
+		}
 	}
 
 	void fillFirstSet () {
@@ -114,3 +126,14 @@ std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsL
 
 
 }
+
+
+// bool contains (const std::vector<std::string>& v, const std::string& target) {
+// 	for (auto i : v) {
+// 		if (i.compare (target) == 0) {
+// 			return true;
+// 		}
+// 	}
+
+// 	return false;
+// }

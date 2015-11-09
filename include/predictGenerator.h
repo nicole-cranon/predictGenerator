@@ -14,10 +14,15 @@
 
 namespace predict {
 	typedef std::unordered_map<std::string,bool> markedVocabulary;
-	extern markedVocabulary derivesLambda;
+	typedef std::unordered_map<std::string,std::set<std::string>> symbolMap;
+	typedef std::vector<std::vector<std::string>> symbolArr;
 
-	std::vector<std::vector<std::string> > getRHS_stringList (
-		std::vector<std::string> RHSList);
+	extern markedVocabulary derivesLambda;
+	extern symbolMap firstSet, 
+		followSet;
+
+
+	symbolArr getRHS_stringList (std::vector<std::string> RHSList);
 
 	// remove white space in string s
 	std::string normalize (const std::string& s);
@@ -25,7 +30,7 @@ namespace predict {
 	void markLambda (const std::vector<std::string>& lhs,
 		const std::vector<std::vector<std::string> >& RHSStringList);
 
-	void computeFirst (const std::string& RHS,
+	void computeFirst (const std::vector<std::vector<std::string> >& RHSStringList,
 		std::set<std::string>& terminalSet);
 
 	void fillFirstSet ();

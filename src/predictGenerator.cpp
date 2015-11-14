@@ -127,26 +127,67 @@ namespace predict {
 	void fillFirstSet (const std::set<std::string> nonterminals, 
 		const std::set<std::string> terminals,
 		const std::vector<std::string> LHS,
-		const std::vector<std::string> RHS) {
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string>>& RHSStringList) {
 
 		auto ntItr = nonterminals.begin();
 		auto tItr = terminals.begin();
 
-		for (ntItr; ntItr != nonterminals.end(); ++ntItr) {
-			if (derivesLambda [ntItr]) {
-
+		for (; ntItr != nonterminals.end(); ++ntItr) {
+			if (derivesLambda [*ntItr]) {
+				firstSet[*ntItr].insert ("");
 			} else {
-				
+				firstSet[*ntItr].clear ();
 			}
 		}
 
+		for (; tItr != terminals.end(); ++tItr) {
+			firstSet[*tItr].insert (*tItr);
 
+			for (ntItr = nonterminals.begin(); ntItr != nonterminals.end(); ++ntItr) {
+				if (derives(*ntItr, *tItr, LHS, RHS)) {
+					firstSet[*ntItr].insert (*ntItr);
+				}
+			}
+		}
+
+		bool changes = true;
+		while (changes) {
+			auto prevFirstSet = firstSet;
+
+			for (unsigned i = 0; i < LHS.size(); ++i) {
+				auto rhsFirst = computeFirst (RHSStringList[i]);
+				firstSet[LHS[i]].insert(rhsFirst.begin(), rhsFirst.end());
+			}
+
+			if (prevFirstSet == firstSet) {
+				changes = false;
+			}
+		}
 	}
 
 	void fillFollowSet () {
 
 	}
 
+	bool derives (const std::string& nonterminal,
+		const std::string& terminal,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS) {
+		std::string rhsNorm = "",
+			lhsNorm = "";
+
+		for (unsigned i = 0; i < LHS.size(); ++i) {
+			rhsNorm = normalize (RHS[i]);
+			lhsNorm = normalize (LHS[i]);
+
+			if (lhsNorm == nonterminal && rhsNorm == terminal) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 }
 

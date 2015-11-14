@@ -30,8 +30,7 @@ namespace predict {
 	void markLambda (const std::vector<std::string>& lhs,
 		const std::vector<std::vector<std::string> >& RHSStringList);
 
-	void computeFirst (const std::vector<std::vector<std::string> >& RHSStringList,
-		std::set<std::string>& terminalSet);
+	std::set<std::string> computeFirst (const std::vector<std::string>& RHSString);
 
 	void fillFirstSet (const std::set<std::string> nonterminals, 
 		const std::set<std::string> terminals,
@@ -40,7 +39,10 @@ namespace predict {
 
 	void fillFollowSet ();
 
-
+	bool derives (const std::string& nonterminal,
+		const std::string& terminal,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS);
 };
 
 #endif

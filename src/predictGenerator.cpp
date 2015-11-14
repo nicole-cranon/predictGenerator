@@ -124,7 +124,22 @@ namespace predict {
 		return terminalSet;
 	}
 
-	void fillFirstSet () {
+	void fillFirstSet (const std::set<std::string> nonterminals, 
+		const std::set<std::string> terminals,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS) {
+
+		auto ntItr = nonterminals.begin();
+		auto tItr = terminals.begin();
+
+		for (ntItr; ntItr != nonterminals.end(); ++ntItr) {
+			if (derivesLambda [ntItr]) {
+
+			} else {
+				
+			}
+		}
+
 
 	}
 

@@ -33,7 +33,10 @@ namespace predict {
 	void computeFirst (const std::vector<std::vector<std::string> >& RHSStringList,
 		std::set<std::string>& terminalSet);
 
-	void fillFirstSet ();
+	void fillFirstSet (const std::set<std::string> nonterminals, 
+		const std::set<std::string> terminals,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS);
 
 	void fillFollowSet ();
 

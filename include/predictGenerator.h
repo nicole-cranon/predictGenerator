@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 namespace predict {
 	typedef std::unordered_map<std::string,bool> markedVocabulary;
@@ -35,11 +36,22 @@ namespace predict {
 	void fillFirstSet (const std::set<std::string> nonterminals, 
 		const std::set<std::string> terminals,
 		const std::vector<std::string> LHS,
-		const std::vector<std::string> RHS);
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string>>& RHSStringList);
 
 	void fillFollowSet ();
 
 	bool derives (const std::string& nonterminal,
+		const std::string& terminal,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string> >& RHSStringList);
+
+	/*
+	if nonterminal yields terminal, returns true, else returns false
+	that is nonterminal -> terminal
+	*/
+	bool yields (const std::string& nonterminal,
 		const std::string& terminal,
 		const std::vector<std::string> LHS,
 		const std::vector<std::string> RHS);

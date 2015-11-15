@@ -7,6 +7,7 @@
 #include "predictGenerator.h"
 #include "grammeranalyzer.h"
 #include <iostream>
+#include <algorithm>
 
 int main (int argc, char *argv[]) {
 	if (argc < 2) {
@@ -36,14 +37,41 @@ int main (int argc, char *argv[]) {
 		LHSList[i] = predict::normalize (LHSList[i]);
 		//std::cout << "\nLHS->" << l << "<-\n";
 	}
+	auto tmpnonterminals = nonterminals;
+	for (std::set<std::string>::iterator itr = tmpnonterminals.begin(); itr != tmpnonterminals.end(); ++itr) {
+		auto temp = predict::normalize (*itr);
+		nonterminals.insert(temp);
+		nonterminals.erase(*itr);
+	}
+	auto tmpterminals = terminals;
+	for (std::set<std::string>::iterator itr = tmpterminals.begin(); itr != tmpterminals.end(); ++itr) {
+		auto temp = predict::normalize (*itr);
+		terminals.insert(temp);
+		terminals.erase(*itr);
+	}
+	auto tmpsymbols = symbols;
+	for (std::set<std::string>::iterator itr = tmpsymbols.begin(); itr != tmpsymbols.end(); ++itr) {
+		auto temp = predict::normalize (*itr);
+		symbols.insert(temp);
+		symbols.erase(*itr);
+	}
+
 
 	auto RHSStringList = predict::getRHS_stringList (RHSList);
 
 	predict::markLambda (LHSList, RHSStringList);
 
 	for (auto d : predict::derivesLambda) {
-		std::cout << "\nDerives Lambda-> " << std::boolalpha <<  d.first << ' ' << d.second << " <-\n";
+		// std::cout << "\nDerives Lambda-> " << std::boolalpha <<  d.first << ' ' << d.second << " <-\n";
 	}
 
-	
+	predict::fillFirstSet (nonterminals, terminals, LHSList, RHSList, RHSStringList);
+
+	for (auto f : predict::firstSet) {
+		std::cout << f.first << " = {" ;
+		for (auto k : f.second) {
+			std::cout << k << ' ';
+		}
+		std::cout << "}\n";
+	}
 }

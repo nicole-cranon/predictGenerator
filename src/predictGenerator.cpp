@@ -93,7 +93,7 @@ namespace predict {
 					changes = true;
 
 					derivesLambda[lhsList[i]] = true;
-					// std::cout << "\nlhs-> " << lhsList[i] << " derives lamda " << derivesLambda[lhsList[i]] << '\n';
+					// std::cout << "\nlhs-> " << lhsList[i] << " yields lamda " << derivesLambda[lhsList[i]] << '\n';
 				}
 			}
 		}
@@ -142,14 +142,28 @@ namespace predict {
 		}
 
 		for (; tItr != terminals.end(); ++tItr) {
-			firstSet[*tItr].insert (*tItr);
+			if (tItr->compare("") != 0){
+				firstSet[*tItr].insert (*tItr);
+			}
 
 			for (ntItr = nonterminals.begin(); ntItr != nonterminals.end(); ++ntItr) {
-				if (derives(*ntItr, *tItr, LHS, RHS)) {
-					firstSet[*ntItr].insert (*ntItr);
+/*				if (derives(*ntItr, *tItr, LHS, RHS, RHSStringList)) {
+					firstSet[*ntItr].insert (*tItr);
+					// std::cout << "\nnonterminal " << *ntItr << " derives " << *tItr << '\n'; 
+				}*/
+				if (yields(*ntItr, *tItr, LHS, RHS)) {
+					firstSet[*ntItr].insert (*tItr);
+					// std::cout << "\nnonterminal " << *ntItr << " derives " << *tItr << '\n'; 
 				}
 			}
 		}
+/*
+		for (auto i : firstSet) {
+			std::cout << "\nfirst set of " << i.first << " " ;
+			for (auto elem : i.second) {
+				std::cout << elem << ", ";
+			}
+		}*/
 
 		bool changes = true;
 		while (changes) {
@@ -158,12 +172,24 @@ namespace predict {
 			for (unsigned i = 0; i < LHS.size(); ++i) {
 				auto rhsFirst = computeFirst (RHSStringList[i]);
 				firstSet[LHS[i]].insert(rhsFirst.begin(), rhsFirst.end());
+/*
+				std::cout << '\n' << LHS[i] << "{" ;
+				for (auto k : firstSet[LHS[i]]) {
+					std::cout << k << ' ';
+				}
+				std::cout << "}\n";*/
+/*				std::cout << '\n' << LHS[i] << " computefirst elements " ;
+				for (auto r: rhsFirst) {
+					std::cout << r << ' ';
+				}*/
 			}
 
 			if (prevFirstSet == firstSet) {
 				changes = false;
 			}
 		}
+
+
 	}
 
 	void fillFollowSet () {
@@ -173,15 +199,30 @@ namespace predict {
 	bool derives (const std::string& nonterminal,
 		const std::string& terminal,
 		const std::vector<std::string> LHS,
-		const std::vector<std::string> RHS) {
-		std::string rhsNorm = "",
-			lhsNorm = "";
-
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string> >& RHSStringList) {
 		for (unsigned i = 0; i < LHS.size(); ++i) {
-			rhsNorm = normalize (RHS[i]);
-			lhsNorm = normalize (LHS[i]);
+			if (LHS[i].compare(nonterminal) == 0) {
+				for (unsigned j = 0; j < RHSStringList[i].size(); ++j) {
+					if (RHSStringList[i][j].compare(terminal) == 0) {
+						return true;
+					}
+					if (yields (RHSStringList[i][j], terminal, LHS, RHS)) {
+						return true;
+					}
+				}
+			}
+		}
 
-			if (lhsNorm == nonterminal && rhsNorm == terminal) {
+		return false;
+	}
+
+	bool yields (const std::string& nonterminal,
+		const std::string& terminal,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS) {
+		for (unsigned i = 0; i < LHS.size(); ++i) {
+			if (LHS[i].compare(nonterminal) == 0 && RHS[i].compare (terminal) == 0) {
 				return true;
 			}
 		}

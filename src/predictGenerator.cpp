@@ -247,6 +247,10 @@ namespace predict {
 		}
 	}
 
+	void predict (const std::set<std::string> nonterminals) {
+		
+	}
+
 	bool derives (const std::string& nonterminal,
 		const std::string& terminal,
 		const std::vector<std::string> LHS,

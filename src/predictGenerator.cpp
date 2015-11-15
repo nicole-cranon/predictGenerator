@@ -192,8 +192,59 @@ namespace predict {
 
 	}
 
-	void fillFollowSet () {
+	void fillFollowSet (const std::set<std::string> nonterminals, 
+		const std::set<std::string> terminals,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string>>& RHSStringList) {
 
+		auto ntItr = nonterminals.begin();
+		auto tItr = terminals.begin();
+
+		for (; ntItr != nonterminals.end(); ++ntItr) {
+			followSet [*ntItr].clear ();
+		}
+
+		followSet["<systemgoal>"].insert ("");
+
+		bool changes = true;
+		while (changes) {
+			auto prevFollowSet = followSet;
+			for (unsigned i = 0; i < LHS.size(); ++i) {
+				for (unsigned j = 0; j < RHSStringList[i].size(); ++j) {
+					if (terminals.find (RHSStringList[i][j]) == terminals.end()) {
+						if (j+1 < RHSStringList[i].size()) {
+							auto firstsetNext = firstSet[RHSStringList[i][j+1]];
+							firstsetNext.erase ("");
+
+							followSet[RHSStringList[i][j]].insert (firstsetNext.begin(), firstsetNext.end());
+
+/*							for (auto fs: firstsetNext){
+								std::cout << "\ninserting " << fs << " into the followSet of " << RHSStringList[i][j] << '\n';
+							}*/
+
+							// std::cout << "\nCurrent nonterminal " << RHSStringList[i][j] << '\n';
+							if (firstSet[RHSStringList[i][j+1]].find("") != firstSet[RHSStringList[i][j+1]].end()) {
+								// std::cout << "\nCurrent nonterminal " << RHSStringList[i][j] << '\n';
+								followSet[RHSStringList[i][j]].insert (followSet[LHS[i]].begin(), followSet[LHS[i]].end());
+							}
+/*
+							for (auto fs: followSet[LHS[i]]){
+								std::cout << "\nadding " << fs << " into the followSet of " << RHSStringList[i][j] << '\n';
+							}*/
+						}
+
+						else if (firstSet[RHSStringList[i][j]].find("") != firstSet[RHSStringList[i][j]].end()) {
+							followSet[RHSStringList[i][j]].insert (followSet[LHS[i]].begin(), followSet[LHS[i]].end());
+						}
+					}
+				}
+			}
+
+			if (prevFollowSet == followSet) {
+				changes = false;
+			}
+		}
 	}
 
 	bool derives (const std::string& nonterminal,

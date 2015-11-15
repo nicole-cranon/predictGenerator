@@ -35,9 +35,11 @@ namespace ga {
 				RHSList.push_back (RHS);
 
 				if (is_terminal(RHS)) {
-					terminals.insert (RHS);
-					symbols.insert (RHS);
-					nonterminals.insert (LHS);
+					if (RHS.compare("") != 0) {
+						terminals.insert (RHS);
+						symbols.insert (RHS);
+					}
+					// nonterminals.insert (LHS);
 				} else {
 					nonterminals.insert (LHS);
 					symbols.insert (LHS);
@@ -85,7 +87,7 @@ namespace ga {
 		std::string production = "";
 		inFileStream.open (filename);
 
-		if (!inFileStream.good () || inFileStream == NULL) {
+		if (!inFileStream.good ()) {
 
 			std::cerr << "\nError opening file " << filename << ".\n";
 			exit (1);

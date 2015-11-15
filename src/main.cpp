@@ -67,11 +67,37 @@ int main (int argc, char *argv[]) {
 
 	predict::fillFirstSet (nonterminals, terminals, LHSList, RHSList, RHSStringList);
 
-	for (auto f : predict::firstSet) {
-		std::cout << f.first << " = {" ;
-		for (auto k : f.second) {
-			std::cout << k << ' ';
+	std::cout << "\nFirst Sets";
+	for (auto nt: nonterminals) {
+		std::cout << '\n' << nt << " = {";
+
+		for (auto elem: predict::firstSet[nt]) {
+			if (elem.compare("") == 0) {
+				std::cout << "lambda";
+			} else {
+				std::cout << elem;
+			}
+			std::cout << ',';
 		}
-		std::cout << "}\n";
+		std::cout << "}";
 	}
+
+	predict::fillFollowSet (nonterminals, terminals, LHSList, RHSList, RHSStringList);
+
+	std::cout << "\n\nFollow Sets";
+	for (auto nt: nonterminals) {
+		std::cout << '\n' << nt << " = {";
+
+		for (auto elem: predict::followSet[nt]) {
+			if (elem.compare("") == 0) {
+				std::cout << "lambda";
+			} else {
+				std::cout << elem;
+			}
+			std::cout << ',';
+		}
+		std::cout << "}";
+	}
+
+	std::cout << "\n\n";
 }

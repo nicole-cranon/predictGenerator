@@ -39,7 +39,11 @@ namespace predict {
 		const std::vector<std::string> RHS,
 		const std::vector<std::vector<std::string>>& RHSStringList);
 
-	void fillFollowSet ();
+	void fillFollowSet (const std::set<std::string> nonterminals, 
+		const std::set<std::string> terminals,
+		const std::vector<std::string> LHS,
+		const std::vector<std::string> RHS,
+		const std::vector<std::vector<std::string>>& RHSStringList);
 
 	bool derives (const std::string& nonterminal,
 		const std::string& terminal,

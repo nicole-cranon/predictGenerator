@@ -18,6 +18,7 @@ namespace predict {
 	typedef std::unordered_map<std::string,std::set<std::string>> symbolMap;
 	typedef std::vector<std::vector<std::string>> symbolArr;
 
+	extern std::vector<std::set<std::string>> predictSet;
 	extern markedVocabulary derivesLambda;
 	extern symbolMap firstSet, 
 		followSet;
@@ -45,7 +46,9 @@ namespace predict {
 		const std::vector<std::string> RHS,
 		const std::vector<std::vector<std::string>>& RHSStringList);
 
-	void predict (const std::set<std::string> nonterminals);
+	void predict (const std::vector<std::string>& LHS, 
+		const std::vector<std::string>& RHS, 
+		const std::vector<std::vector<std::string>>& RHSStringList);
 
 	bool derives (const std::string& nonterminal,
 		const std::string& terminal,

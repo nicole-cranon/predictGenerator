@@ -99,5 +99,16 @@ int main (int argc, char *argv[]) {
 		std::cout << "}";
 	}
 
+	predict::predict (LHSList, RHSList, RHSStringList);
+
+	std::cout << "\n\nPredict Sets";
+	for (unsigned i = 0; i < predict::predictSet.size(); ++i) {
+		std::cout << "\n " << i+1 << ". " << LHSList[i] << " = {";
+		for (auto elem: predict::predictSet[i]) {
+			std::cout << elem << ',';
+		}
+		std::cout << "}";
+	}
+	
 	std::cout << "\n\n";
 }

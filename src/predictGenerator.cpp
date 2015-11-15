@@ -12,6 +12,8 @@ namespace predict {
 	markedVocabulary derivesLambda;
 	symbolMap firstSet, 
 		followSet;
+	std::vector<std::set<std::string>> predictSet;
+
 
 	symbolArr getRHS_stringList (std::vector<std::string> RHSList) {
 			std::string symbol;
@@ -147,23 +149,11 @@ namespace predict {
 			}
 
 			for (ntItr = nonterminals.begin(); ntItr != nonterminals.end(); ++ntItr) {
-/*				if (derives(*ntItr, *tItr, LHS, RHS, RHSStringList)) {
-					firstSet[*ntItr].insert (*tItr);
-					// std::cout << "\nnonterminal " << *ntItr << " derives " << *tItr << '\n'; 
-				}*/
 				if (yields(*ntItr, *tItr, LHS, RHS)) {
 					firstSet[*ntItr].insert (*tItr);
-					// std::cout << "\nnonterminal " << *ntItr << " derives " << *tItr << '\n'; 
 				}
 			}
 		}
-/*
-		for (auto i : firstSet) {
-			std::cout << "\nfirst set of " << i.first << " " ;
-			for (auto elem : i.second) {
-				std::cout << elem << ", ";
-			}
-		}*/
 
 		bool changes = true;
 		while (changes) {
@@ -172,16 +162,6 @@ namespace predict {
 			for (unsigned i = 0; i < LHS.size(); ++i) {
 				auto rhsFirst = computeFirst (RHSStringList[i]);
 				firstSet[LHS[i]].insert(rhsFirst.begin(), rhsFirst.end());
-/*
-				std::cout << '\n' << LHS[i] << "{" ;
-				for (auto k : firstSet[LHS[i]]) {
-					std::cout << k << ' ';
-				}
-				std::cout << "}\n";*/
-/*				std::cout << '\n' << LHS[i] << " computefirst elements " ;
-				for (auto r: rhsFirst) {
-					std::cout << r << ' ';
-				}*/
 			}
 
 			if (prevFirstSet == firstSet) {
@@ -199,7 +179,6 @@ namespace predict {
 		const std::vector<std::vector<std::string>>& RHSStringList) {
 
 		auto ntItr = nonterminals.begin();
-		auto tItr = terminals.begin();
 
 		for (; ntItr != nonterminals.end(); ++ntItr) {
 			followSet [*ntItr].clear ();
@@ -216,22 +195,11 @@ namespace predict {
 						if (j+1 < RHSStringList[i].size()) {
 							auto firstsetNext = firstSet[RHSStringList[i][j+1]];
 							firstsetNext.erase ("");
-
 							followSet[RHSStringList[i][j]].insert (firstsetNext.begin(), firstsetNext.end());
 
-/*							for (auto fs: firstsetNext){
-								std::cout << "\ninserting " << fs << " into the followSet of " << RHSStringList[i][j] << '\n';
-							}*/
-
-							// std::cout << "\nCurrent nonterminal " << RHSStringList[i][j] << '\n';
 							if (firstSet[RHSStringList[i][j+1]].find("") != firstSet[RHSStringList[i][j+1]].end()) {
-								// std::cout << "\nCurrent nonterminal " << RHSStringList[i][j] << '\n';
 								followSet[RHSStringList[i][j]].insert (followSet[LHS[i]].begin(), followSet[LHS[i]].end());
 							}
-/*
-							for (auto fs: followSet[LHS[i]]){
-								std::cout << "\nadding " << fs << " into the followSet of " << RHSStringList[i][j] << '\n';
-							}*/
 						}
 
 						else if (firstSet[RHSStringList[i][j]].find("") != firstSet[RHSStringList[i][j]].end()) {
@@ -247,21 +215,34 @@ namespace predict {
 		}
 	}
 
-	void predict (const std::set<std::string> nonterminals) {
-		
+	void predict (const std::vector<std::string>& LHS, 
+		const std::vector<std::string>& RHS, 
+		const std::vector<std::vector<std::string>>& RHSStringList) {
+		predictSet.resize (LHS.size());
+
+		for (unsigned i = 0; i < LHS.size(); ++i) {
+			if (RHS[i].compare("") == 0) {
+				predictSet[i] = followSet[LHS[i]];
+				predictSet[i].erase ("");
+			} else {
+				predictSet[i] = computeFirst(RHSStringList[i]);
+			}
+		}
 	}
 
 	bool derives (const std::string& nonterminal,
 		const std::string& terminal,
-		const std::vector<std::string> LHS,
-		const std::vector<std::string> RHS,
+		const std::vector<std::string>& LHS,
+		const std::vector<std::string>& RHS,
 		const std::vector<std::vector<std::string> >& RHSStringList) {
 		for (unsigned i = 0; i < LHS.size(); ++i) {
 			if (LHS[i].compare(nonterminal) == 0) {
 				for (unsigned j = 0; j < RHSStringList[i].size(); ++j) {
+					// current right hand side element is a terminal
 					if (RHSStringList[i][j].compare(terminal) == 0) {
 						return true;
 					}
+					// current right hand side element is a nonterminal
 					if (yields (RHSStringList[i][j], terminal, LHS, RHS)) {
 						return true;
 					}
@@ -286,14 +267,3 @@ namespace predict {
 	}
 
 }
-
-
-// bool contains (const std::vector<std::string>& v, const std::string& target) {
-// 	for (auto i : v) {
-// 		if (i.compare (target) == 0) {
-// 			return true;
-// 		}
-// 	}
-
-// 	return false;
-// }

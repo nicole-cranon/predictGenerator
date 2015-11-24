@@ -5,7 +5,7 @@
  */
 
 #include "predictGenerator.h"
-#include "grammeranalyzer.h"
+#include "grammerAnalyzer.h"
 #include <iostream>
 #include <algorithm>
 

@@ -17,8 +17,7 @@ namespace predict {
 
 	symbolArr getRHS_stringList (std::vector<std::string> RHSList) {
 			std::string symbol;
-		unsigned split_pos = 0,
-			i = 0;
+		unsigned split_pos = 0;
 
 		std::vector<std::vector<std::string> > RHS_stringList;
 		std::vector<std::string> RHSSet;
@@ -27,12 +26,10 @@ namespace predict {
 			while (!RHSList[i].empty()) {
 				split_pos = RHSList[i].find("><");
 
-				if (split_pos != std::string::npos 
-					&& split_pos+1 != RHSList[i].length()) {
-
+				if (split_pos < RHSList[i].size() && split_pos+1 != RHSList[i].size()) {
 					symbol = RHSList[i].substr(0, split_pos+1);
-				
-					RHSList[i] = RHSList[i].substr(split_pos+1);
+					unsigned RHSLength = RHSList[i].size() - split_pos-1;
+					RHSList[i] = RHSList[i].substr(split_pos+1, RHSLength);
 				} else {
 					symbol = RHSList[i];
 					RHSList[i] = "";
@@ -40,21 +37,20 @@ namespace predict {
 				RHSSet.push_back (symbol);
 			}
 
-
 			RHS_stringList.push_back(RHSSet);
 			RHSSet.clear();
 		}
 
-			i = 0;
-			for (auto x : RHS_stringList) {
-				// std::cout << "\nRHS List of Symbols " << i << " ";
+			// unsigned i = 0;
+			// for (auto x : RHS_stringList) {
+			// 	std::cout << "\nRHS List of Symbols " << i << " ";
 
-				for (auto v : x) {
-					// std::cout << v << ',';
-				}
-				// std::cout <<'\n';
-				++i;
-			}
+			// 	for (auto v : x) {
+			// 		std::cout << v << ',';
+			// 	}
+			// 	std::cout <<'\n';
+			// 	++i;
+			// }
 
 		return RHS_stringList;
 	}
